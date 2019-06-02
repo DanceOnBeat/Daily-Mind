@@ -88,7 +88,7 @@
 1. 浏览器是多线程的，包括：JS线程、事件线程、定时器触发线程、HTTP请求线程等等
 2. 渲染线程和JS线程互斥，因此JS主线程执行时间过长，会导致页面卡顿
 3. 屏幕一般的刷新频率为60fps，因此浏览器需保证60fps的刷新频率才能保证动画流畅，即每16ms需完成一次渲染
-4. 浏览器中一帧的内容包括：&nbsp;&nbsp; &nbsp;&nbsp;![6182585fe5e40620a09ea763ec93039f.jpeg](evernotecid://2C72477C-5C29-41F6-A1FB-273251F2E68F/appyinxiangcom/18509279/ENResource/p11)
+4. 浏览器中一帧的内容包括：&nbsp;&nbsp; &nbsp;&nbsp;![https://github.com/DanceOnBeat/Daily-Mind/edit/master/2019.04/img/2019_04_frame.jpg](evernotecid://2C72477C-5C29-41F6-A1FB-273251F2E68F/appyinxiangcom/18509279/ENResource/p11)
 &nbsp; &nbsp; 
 5. 帧和Event Loop的关系是：帧表示一次浏览器刷新需要做的事情，仅仅表示一个抽象的概念，而Event Loop包含了Task和rendering，即帧的操作是在Event Loop中完成的，Event Loop不一定会执行rendering
 6. 为了防止卡顿，我们需要控制JS的执行时间，使Layout和Paint能够正常完成，一个渲染帧内JS的最大执行时间称为时间片
