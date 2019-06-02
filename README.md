@@ -1,2 +1,4 @@
 # Daily-Mind
- Every day of study and thinking
+ 好记性不如个烂笔头
+ 记录每一天的学习与个人的思考
+ 偶尔会因为工作忙偷个懒~
