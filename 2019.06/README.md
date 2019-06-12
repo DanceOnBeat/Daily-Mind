@@ -69,3 +69,25 @@ dispatch(componentName: string, eventName: string, params: any[]) {
     }
   }
 ```
+* * *
+### 6.10
+#### Vue Transition踩坑
+* v-enter元素被插入之前生效，v-enter-active元素插入前生效，元素插入后的下一帧（浏览器渲染帧）移除
+* v-enter-to在v-enter移除后生效，动画/渲染帧完成后移除
+* v-enter-active在v-enter和v-enter-to的生命周期生效
+* 若元素使用v-if控制，则无法在beforeEnter和enter钩子中操作DOM，此时需要使用afterEnter
+* afterEnter钩子是在整个动画完成后触发，即比v-enter-to晚，当钩子与过渡类配合使用时需注意执行顺序
+* 经测试在before-leave和leave钩子中同时修改一个样式如height，会在同一帧中执行，造成transition无效，需要添加setTimeout延迟执行：
+```javascript
+  public beforeLeave(el: HTMLElement) {
+    el.style.height = '10px';
+  }
+
+  public leave(el: HTMLElement) {
+    // 修复before-leave与leave在同一帧中被修改height导致无动画
+    setTimeout(() => {
+      el.style.height = '0'
+    }, 0)
+  }
+```
+* Vue中会通过transitionend事件嗅探CSS Transition是否结束
