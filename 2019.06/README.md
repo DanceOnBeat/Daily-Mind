@@ -91,3 +91,18 @@ dispatch(componentName: string, eventName: string, params: any[]) {
   }
 ```
 * Vue中会通过transitionend事件嗅探CSS Transition是否结束
+* * *
+### 6.13
+#### Vue Test Utils结合TypeScript的单测实践
+* 对于UI组件来说，不应一味追求行级覆盖率，应当只关注输入输出，避免涉及过多的实现细节，从而避免琐碎的测试
+* Jest/Mocha/Karma的关系：Jest/Mocha是测试框架，提供了describe/it等api，同时也提供测试运行环境，Jest使用JSDOM，Mocha常用于NodeJS环境。Karma是提供了运行在不同client（chrome、firefox）的工具，同时支持与多种测试框架配合使用
+* Karma是一个C/S架构的工具，server能监听文件改动，保存触发测试，同时也能支持多种CI，参考[http://taobaofed.org/blog/2016/01/08/karma-origin/](http://taobaofed.org/blog/2016/01/08/karma-origin/)
+* Vue Test Utils创建的wrapper是Vue类型，因此通过wrapper.vm无法获取自定义组件属性，目前官方还未解决这个问题，需要通过(wrapper.vm as any).xxx来获取
+* Vue Test Utils中shallowMount和mount的区别为：shallowMount不会去render自定义的子组件，而mount会render所有组件。当需要操作子组件时应用mount
+
+
+* * *
+### 6.14
+#### scrollHeight和clientHeight
+* clientHeight表示当前元素可视区域的内容和内边距，不包括滚动条、边框、外边距
+* scrollHeight表示当前元素内容和内边距，包含不可见部分，此时若给改元素设置height，不会影响scrollHeight获取的值
