@@ -106,3 +106,21 @@ dispatch(componentName: string, eventName: string, params: any[]) {
 #### scrollHeight和clientHeight
 * clientHeight表示当前元素可视区域的内容和内边距，不包括滚动条、边框、外边距
 * scrollHeight表示当前元素内容和内边距，包含不可见部分，此时若给改元素设置height，不会影响scrollHeight获取的值
+* * *
+### 6.16
+#### DNS中的CNAME和A记录
+* A记录指一个域名指向一个IP
+* CNAME（Canonical Name record）指一个域名指向另一个域名，当一个IP上运行多个服务（不同端口）时，若IP需要改变，只需要改变A记录即可，否则需要对所有服务进行修改，参考：[https://en.wikipedia.org/wiki/CNAME_record](https://en.wikipedia.org/wiki/CNAME_record)
+
+* * *
+
+### 6.18
+#### 正则相关
+* 匹配优先量词包括：{m,n} {m,} ? * +，被匹配优先量词修饰的表达式使用贪婪模式，尽可能多的匹配
+* 忽略优先量词即在匹配优先量词后加上?，如+?，被其修饰的表达式使用非贪婪模式
+* 贪婪模式相较于非贪婪模式在一般场景下效率较高，因为非贪婪模式可能需要不断的回溯并转交控制权，原理可参考：[https://blog.csdn.net/lxcnn/article/details/4756030](https://blog.csdn.net/lxcnn/article/details/4756030)
+* (?=pattern)和(?!pattern)是正向肯定/否定预查，如Windows(?=95|98|NT|2000)，肯定时只匹配Windows95或98或NT或2000的Windows，是一个非获取匹配，即括号中的内容不会被捕获并存储在内存
+* (?<=pattern)和(?<!pattern)是反向肯定/否定预查，如(?<=95|98|NT|2000)Windows，同上只是方向相反
+* (?:pattern)表示普通的非获取匹配，如industr(?:y|ies)，用来替代industry|industries
+* 正则中()代表分组捕获，捕获内容会被存储，随后可使用分组序号访问；分组捕获也可被命名，如(?\<data\>a)，随后可用于条件表达式，如(?(data)yes|no)
+* 平衡组即几种正则的组合使用，通过(?\<data\>a)入栈，(?\<-data\>a)出栈，再通过条件表达式判断，可用于检测配对内容的场景，如获取<>中的内容等，JS中尚不支持该特性，参考：[https://blog.csdn.net/zm2714/article/details/7946437](https://blog.csdn.net/zm2714/article/details/7946437)
