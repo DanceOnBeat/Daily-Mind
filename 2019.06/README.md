@@ -119,8 +119,9 @@ dispatch(componentName: string, eventName: string, params: any[]) {
 * 匹配优先量词包括：{m,n} {m,} ? * +，被匹配优先量词修饰的表达式使用贪婪模式，尽可能多的匹配
 * 忽略优先量词即在匹配优先量词后加上?，如+?，被其修饰的表达式使用非贪婪模式
 * 贪婪模式相较于非贪婪模式在一般场景下效率较高，因为非贪婪模式可能需要不断的回溯并转交控制权，原理可参考：[https://blog.csdn.net/lxcnn/article/details/4756030](https://blog.csdn.net/lxcnn/article/details/4756030)
-* (?=pattern)和(?!pattern)是正向肯定/否定预查，如Windows(?=95|98|NT|2000)，肯定时只匹配Windows95或98或NT或2000的Windows，是一个非获取匹配，即括号中的内容不会被捕获并存储在内存
-* (?<=pattern)和(?<!pattern)是反向肯定/否定预查，如(?<=95|98|NT|2000)Windows，同上只是方向相反
+* (?=pattern)和(?!pattern)是lookahead，即正行肯定/否定断言，如Windows(?=95|98|NT|2000)，肯定时只匹配Windows95或98或NT或2000的Windows，是一个非获取匹配，即括号中的内容不会被捕获并存储在内存
+* (?<=pattern)和(?<!pattern)是lookbehind，即后行肯定/否定断言，如(?<=95|98|NT|2000)Windows，同上只是方向相反，但是该特性在es2018才支持，可用正行断言来代替，参考[https://stackoverflow.com/questions/406230/regular-expression-to-match-a-line-that-doesnt-contain-a-word](https://stackoverflow.com/questions/406230/regular-expression-to-match-a-line-that-doesnt-contain-a-word)
+* 正行和后行断言个人理解是：正则是从左往右匹配，和正行断言的顺序一致，因此引擎支持较容易；而后行是先匹配断言后的部分，之后再检查断言内容，相当于顺序反一反
 * (?:pattern)表示普通的非获取匹配，如industr(?:y|ies)，用来替代industry|industries
 * 正则中()代表分组捕获，捕获内容会被存储，随后可使用分组序号访问；分组捕获也可被命名，如(?\<data\>a)，随后可用于条件表达式，如(?(data)yes|no)
 * 平衡组即几种正则的组合使用，通过(?\<data\>a)入栈，(?\<-data\>a)出栈，再通过条件表达式判断，可用于检测配对内容的场景，如获取<>中的内容等，JS中尚不支持该特性，参考：[https://blog.csdn.net/zm2714/article/details/7946437](https://blog.csdn.net/zm2714/article/details/7946437)
