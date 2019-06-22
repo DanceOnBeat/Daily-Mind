@@ -125,3 +125,8 @@ dispatch(componentName: string, eventName: string, params: any[]) {
 * (?:pattern)表示普通的非获取匹配，如industr(?:y|ies)，用来替代industry|industries
 * 正则中()代表分组捕获，捕获内容会被存储，随后可使用分组序号访问；分组捕获也可被命名，如(?\<data\>a)，随后可用于条件表达式，如(?(data)yes|no)
 * 平衡组即几种正则的组合使用，通过(?\<data\>a)入栈，(?\<-data\>a)出栈，再通过条件表达式判断，可用于检测配对内容的场景，如获取<>中的内容等，JS中尚不支持该特性，参考：[https://blog.csdn.net/zm2714/article/details/7946437](https://blog.csdn.net/zm2714/article/details/7946437)
+
+* * *
+
+### 6.23
+在Chrome和Opera浏览器中，使用for-in语句遍历Object时，会先取key的parseFloat值，根据数字顺序对属性进行排序并优先进行遍历，剩余的非数字属性按照对象定义的顺序遍历。因此，for-in无法保证遍历输出的顺序，要保证顺序，需使用数组或使用字符串作为key。参考：[http://w3help.org/zh-cn/causes/SJ9011](http://w3help.org/zh-cn/causes/SJ9011)
