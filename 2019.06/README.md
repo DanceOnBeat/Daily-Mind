@@ -130,3 +130,41 @@ dispatch(componentName: string, eventName: string, params: any[]) {
 
 ### 6.23
 在Chrome和Opera浏览器中，使用for-in语句遍历Object时，会先取key的parseFloat值，根据数字顺序对属性进行排序并优先进行遍历，剩余的非数字属性按照对象定义的顺序遍历。因此，for-in无法保证遍历输出的顺序，要保证顺序，需使用数组或使用字符串作为key。参考：[http://w3help.org/zh-cn/causes/SJ9011](http://w3help.org/zh-cn/causes/SJ9011)
+* * *
+### 6.24
+#### Arguments对象
+* arguments不能在箭头函数中使用，除此之外可在其他所有函数中使用
+* arguments直接被暴露会导致性能问题，例如使用Array.prototype.slice.call(arguments)，这边直接将arguments作为参数传递。若注重性能，可遍历arguments，将每一项添加至新数组来替代。参考：[https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#3-managing-arguments](https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#3-managing-arguments)
+* 在非严格模式下，剩余参数，默认参数、解构赋值参数会改变arguments的行为，如：
+
+```javascript
+function func(a) { 
+  a = 99;              // 更新了a 同样更新了arguments[0] 
+  console.log(arguments[0]);
+}
+func(10); // 99
+```
+arguments单独使用，会与a双向绑定。
+
+```javascript
+function func(a = 55) { 
+  arguments[0] = 99; // updating arguments[0] does not also update a
+  console.log(a);
+}
+func(10); // 10
+```
+a是默认赋值的参数，arguments与其没有双向绑定的关系。
+
+#### WebWorker/SharedWorker/ServiceWorker
+WebWorker和SharedWorker的区别：
+
+SharedWorker可以由多个script共享，但是受同源策略限制（协议、域名、端口），WebWorker只能由创建它的script访问
+
+SharedWorker与ServiceWorker的区别：
+
+ServiceWorker继承了所有SharedWorker的能力，但有几点不同：
+
+* ServiceWorker的生命周期更长，一个service注册到一个域名后，会一直存在；而SharedWorker会在所有引用它的页面关闭后就消失。
+* ServiceWorker可以对网络请求进行拦截和操作
+* ServiceWorker只能运行在HTTPS环境下
+* ServiceWorker利用事件驱动，在被需要时才激活，节省资源
