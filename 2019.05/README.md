@@ -117,9 +117,9 @@ git rebase（变基，即把基底换成主分支最新的commit），参考：[
 1. 所有的构造函数（如：Object、Array）都是Function的实例，因此Object.__proto__指向Function.prototype
 2. 所有的原型对象即prototype是Object的实例，即实例对象，因此Object.__proto__.__proto__ === Object.prototype
 3. 通过call不能完美实现bind函数，因为调用f = fn.bind，new f会去new fn本身并且对instanceof操作符也会做类似的操作，参考：[https://www.zhihu.com/question/323471656/answer/676753753?utm_source=wechat_session&utm_medium=social&utm_oi=701188137568722944](https://www.zhihu.com/question/323471656/answer/676753753?utm_source=wechat_session&utm_medium=social&utm_oi=701188137568722944)
-4. 队列是从队尾添加元素，队首删除元素，对应js的push 和 shift操作
+4. 队列是从队尾添加元素，队首删除元素，对应js的push 和 pop操作
 5. Http1.0对于同一个tcp连接，只有前一个请求收到响应，下一个请求才能发送，阻塞在客户端；http1.1可以同时发出请求，但是要求响应按请求顺序返回，也会造成队头阻塞，阻塞在服务端；http2.0解决了这个问题
-6. 栈只能在栈顶操作，对应js中的unshift和pop操作
+6. 栈只能在栈顶操作，对应js中的unshift和shift操作
 
 
 * * *
