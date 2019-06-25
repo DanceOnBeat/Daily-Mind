@@ -168,3 +168,75 @@ ServiceWorker继承了所有SharedWorker的能力，但有几点不同：
 * ServiceWorker可以对网络请求进行拦截和操作
 * ServiceWorker只能运行在HTTPS环境下
 * ServiceWorker利用事件驱动，在被需要时才激活，节省资源
+
+* * *
+### 6.25
+#### 关于JS面向对象
+
+* JS也是一种面向对象的语言，不像JAVA用类来描述对象，JS使用原型来描述对象
+* ES6之前JS创建对象的方式还是类JAVA的，用构造函数模拟类，通过new关键字创建对象实例，构造函数的Prototype指向实例的原型，整体上还是类的那一套思想，这就出现了很多怪异的操作，如new一个函数这样的操作。
+* ES6提供了create/setPrototypeOf/getPrototypeOf方法直接访问原型，因此可以用真正的”原型描述对象“的方式创建对象，如：
+
+```javascript
+var cat = {
+    say: function() {
+        console.log('miao');
+    }
+};
+var targer = Object.create(cat, {
+    writable: true,
+    enumerable: true,
+    configurable: true,
+    value: function() {
+        console.log('roar');
+    }
+});
+```
+无需通过类那一套方式来描述对象
+* ES6还提供了Class API来替代用构造函数模拟类的那一套，虽然运行时还是通过函数和Prototype，但是写法不在那么怪异
+
+#### JS 箭头函数
+
+箭头函数本身没有this，其this是从上级作用域中获取的，因此遵循了JS词法作用域的获取规则，相当于如下的转换：
+
+```javascript
+// ES6
+function foo() {
+  setTimeout(() => {
+    console.log('id:', this.id);
+  }, 100);
+}
+
+// ES5
+function foo() {
+  var _this = this;
+
+  setTimeout(function () {
+    console.log('id:', _this.id);
+  }, 100);
+}
+```
+因此，对箭头函数进行bind操作没有效果。
+
+#### 事件处理中的this
+
+* HTML中设置onClick绑定事件，此时this指向window
+* JS设置onClick绑定事件，此时this指向被设置的DOM元素，但是这种方式无法本质是设置DOM属性，无法为同一事件设置多个处理函数
+* attachEvent只在IE9及以下生效，this指向window，需要使用bind改变this
+* addEventListener中this指向设置的DOM元素，同currentTarget，而target始终指向点击的目标元素
+
+参考：[https://harttle.land/2015/08/14/event-and-this.html](https://harttle.land/2015/08/14/event-and-this.html)
+
+#### JS事件捕获和冒泡
+JS中事件触发时，会先确定propagation path，即传播路径。它是一个有序的列表，列表的末尾是event target，即目标对象。确定路径后，事件开始分发，即进入捕获阶段，此时在addEventListener中第三个参数设置true且浏览器支持捕获事件即可触发响应。而对event target对象设置该参数无效，会被当做在目标阶段执行。之后会进入冒泡阶段，直到列表的开头结束。参考：[https://www.w3.org/TR/DOM-Level-3-Events/#event-flow](https://www.w3.org/TR/DOM-Level-3-Events/#event-flow)
+
+#### JS中Bind函数
+Bind不仅可以绑定this，还可以绑定参数，类似于高阶函数，如：
+```javascript
+function fn(a, b, c){
+    console.log(a, b, c);
+}
+const bindFn = fn.bind(null, 1, 2);
+bindFn(3); // 1, 2, 3
+```
+可见bind函数绑定了参数1和2，调用bindFn时会作为前面两个参数，传入bindFn的参数紧随其后。
