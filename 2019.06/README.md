@@ -240,3 +240,15 @@ const bindFn = fn.bind(null, 1, 2);
 bindFn(3); // 1, 2, 3
 ```
 可见bind函数绑定了参数1和2，调用bindFn时会作为前面两个参数，传入bindFn的参数紧随其后。
+
+* * *
+### 6.27
+
+#### IaaS/PaaS/SaaS/Serverless
+
+* IaaS: Infrastructure as a Service，云服务的最底层，只提供计算机基础设施
+* PssS: Platform as a Service，抽象了硬件和操作系统等基础设施，但是需要开发者控制应用程序的部署与环境等
+* SaaS：Software as a Service，给用户提供了完整的应用，用户只关心使用
+* Serverless: 分为BaaS和FaaS两种：
+    * BaaS: Backend as a Service，将后端服务化成为第三方服务，例如：文件存储、消息推送等，是在PaaS平台开发能力的基础上，延用SaaS的思路将后端服务化，使开发者在此基础上开发定制化的Software
+    * FaaS: Function as a Service，可由开发者自定义函数，运行于云服务提供商的无状态容器中，只需关心业务逻辑，无需关心基础设施和部署运维。由于无状态，结合事件驱动的方式，可做到只在调用时生成实例，调用完后销毁，相比于传统应用一直运行的方式，能节省大量成本。但是由于冷启动的原因，不适合实时性要求高的场景。比较的流行的产品有AWS Lambda
