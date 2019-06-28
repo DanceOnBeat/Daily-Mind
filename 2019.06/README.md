@@ -252,3 +252,33 @@ bindFn(3); // 1, 2, 3
 * Serverless: 分为BaaS和FaaS两种：
     * BaaS: Backend as a Service，将后端服务化成为第三方服务，例如：文件存储、消息推送等，是在PaaS平台开发能力的基础上，延用SaaS的思路将后端服务化，使开发者在此基础上开发定制化的Software
     * FaaS: Function as a Service，可由开发者自定义函数，运行于云服务提供商的无状态容器中，只需关心业务逻辑，无需关心基础设施和部署运维。由于无状态，结合事件驱动的方式，可做到只在调用时生成实例，调用完后销毁，相比于传统应用一直运行的方式，能节省大量成本。但是由于冷启动的原因，不适合实时性要求高的场景。比较的流行的产品有AWS Lambda
+
+#### TypeScript笔记
+对象字面量赋值给变量或者作为参数传递时会被额外的进行属性检查，如果存在未定义的属性，TS会报编译错误，如：
+
+```typescript
+interface LabelledValue {
+  label: string;
+}
+
+function printLabel(labelledObj: LabelledValue) {
+  console.log(labelledObj.label);
+}
+
+printLabel({size: 10, label: "Size 10 Object"});// size: 10会报错
+```
+解决方法：
+
+```typescript
+interface LabelledValue {
+  label: string;
+  [propertyName: string]: any
+}
+```
+或者：
+
+```typescript
+let myObj = {size: 10, label: "Size 10 Object"};
+printLabel(myObj);
+```
+将其先赋值给变量，再将变量传递给函数可避开检查，但是不推荐这种做法。
