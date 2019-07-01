@@ -282,3 +282,60 @@ let myObj = {size: 10, label: "Size 10 Object"};
 printLabel(myObj);
 ```
 将其先赋值给变量，再将变量传递给函数可避开检查，但是不推荐这种做法。
+* * *
+### 6.28
+
+#### TypeScript笔记
+
+class通过implements实现接口，不同于普通的类型检查，实现接口的类中可包含接口中未定义的属性或方法，而类型检查必须和接口中的属性数量、类型严格一致。
+
+class实现接口时，只会对其实例部分进行检查。而构造函数属于静态部分，因此需要通过以下方式定义来声明类：
+
+```typescript
+interface ClockConstructor {
+  new (hour: number, minute: number): ClockInterface;
+}
+
+interface ClockInterface {
+  tick(): void;
+}
+
+function createClock(ctor: ClockConstructor, hour: number, minute: number) {
+  return new ctor(hour, minute);
+}
+
+class DigitalClock implements ClockInterface {
+  constructor(hour: number, minute: number) {}
+  tick() {
+    console.log('beep beep');
+  }
+}
+
+class AnalogClock implements ClockInterface {
+  constructor(hour: number, minute: number) {}
+  tick() {
+    console.log('tick tock');
+  }
+}
+
+let digital = createClock(DigitalClock, 1, 2);
+let analog = createClock(AnalogClock, 3, 4);
+```
+
+可见，对类进行普通的类型声明即是对静态部分的检查。此外，interface中声明new是对对象的constructor属性进行类型声明，因此见以下例子：
+
+```typescript
+interface A {
+  new(): any
+}
+
+function B() {}
+
+class C {}
+
+const a: A = B.prototype
+const b: A = new B()
+const c: A = C
+const d: A = B // error
+```
+在JS中，原型对象拥有constructor属性指向构造函数，因此原型对象和其构造函数的实例均满足条件，类也是同样的道理。而函数B没有constructor属性，且没有原型链，因此不满足。注意区分prototype和__proto__的区别。
