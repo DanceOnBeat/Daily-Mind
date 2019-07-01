@@ -105,7 +105,7 @@ dispatch(componentName: string, eventName: string, params: any[]) {
 ### 6.14
 #### scrollHeight和clientHeight
 * clientHeight表示当前元素可视区域的内容和内边距，不包括滚动条、边框、外边距
-* scrollHeight表示当前元素内容和内边距，包含不可见部分，此时若给改元素设置height，不会影响scrollHeight获取的值
+* scrollHeight表示当前元素内容和内边距，包含不可见部分，此时若给该元素设置小于scrollHeight的值，不会影响scrollHeight获取的值
 * * *
 ### 6.16
 #### DNS中的CNAME和A记录
