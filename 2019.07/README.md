@@ -133,3 +133,5 @@ Array.prototype.quickSort = function() {
 * JIT在解释执行字节码的过程中，会观察其执行情况，若发现热点代码，即经常执行的代码，JIT会将其编译成高效代码
 * 开发者在编写JS代码时，要避免没必要的类型转换，因为JS引擎是用C++实现的，其内部考虑了JS复杂的类型转换，影响效率，JIT发现热点代码后会延用之前的类型信息，一旦类型转换，优化会失效
 
+参考：[https://cnodejs.org/topic/59084a9cbbaf2f3f569be482](https://cnodejs.org/topic/59084a9cbbaf2f3f569be482)
+
