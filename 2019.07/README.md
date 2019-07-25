@@ -92,3 +92,44 @@ Array.prototype.quickSort = function() {
 * 第二个保护级别是密封对象，使用Object.seal方法密封对象。其不可扩展，且[[configurable]]被置为false，即不能删除属性和方法，但属性值可以修改。使用Object.isSealed判断对象是否密封
 * 最严格的防篡改级别是冻结对象，使用Object.freeze冻结对象。冻结对象既是密封也是不可扩展的，数据属性不可修改，访问器属性仍然可写。使用Object.isFrozen判断对象是否冻结，一般用于第三方库，防止核心对象被修改
 
+* * *
+### 7.9
+#### (5).toString和5.toString的区别
+5.toString中5.会被认为是一个浮点数，因此会报错，可写成5..toString()，(5).toString中括号标识一个表达式，因此可调用方法
+
+* * *
+### 7.22
+
+#### 精读Vue3.0 Function API
+
+1. Vue通过value API创建响应式数据，返回的是一个Wrapper对象，因为只能对对象进行数据劫持
+2. 由于返回的是Wrapper对象，则其与React中的UseRef类似，不具备[capture value](https://github.com/dt-fe/weekly/blob/v2/095.%E7%B2%BE%E8%AF%BB%E3%80%8AFunction%20VS%20Class%20%E7%BB%84%E4%BB%B6%E3%80%8B.md#capture-props)的特性
+3. setup函数只会执行一次，因为内部是利用了Vue的响应式原理；而React Hooks每次都会执行，并且需要UseCallback、UseMemo进行优化，在Vue Hooks不需要考虑这些
+
+参考：[https://juejin.im/post/5d1955e3e51d4556d86c7b09?utm_source=gold_browser_extension](https://juejin.im/post/5d1955e3e51d4556d86c7b09?utm_source=gold_browser_extension)
+
+* * *
+
+### 7.23
+
+#### 微前端的相关实践
+
+1. 微服务化：将模块作为单独的应用部署服务，主应用通过iframe引用；缺点：iframe与spa相比性能差
+2. 微应用化：
+
+    * npm组件库方式：组件库开发时是一个单独应用，拥有独立的开发环境；构建和运行时是一个个独立的模块，版本管理遵循semver较为容易
+    * 每个模块都是独立的应用，拥有独立的仓库。开发时也是单独的应用，构建时通过持续集成将bundle复制到主应用
+
+应提供模块注册、销毁等功能，在注册模块时需要与主应用的router和store进行合并，静态资源建议上传cdn，否则需要在应用间复制才可以使用。
+
+* * *
+
+### 7.25
+
+#### V8相关优化
+
+* V8一开始是将JS源代码转换成AST后直接编译到机器码执行，执行性能较高，但是占用内存过大，导致浏览器缓存出问题。并且生成机器码需要考虑硬件环境等，使V8的代码变得异常复杂
+* v8.5.9中发布了Ignition字节码解释器，将AST转换成编码更加精简的字节码，字节码再通过如Turbofan的JIT生成高效的机器码。如此一来，浏览器只需缓存内存更加小的字节码即可，配合工程化的按需加载，可以减轻内存压力。不过，由于运行时多了生成字节码的环节，导致性能没有直接转换成机器码好
+* JIT在解释执行字节码的过程中，会观察其执行情况，若发现热点代码，即经常执行的代码，JIT会将其编译成高效代码
+* 开发者在编写JS代码时，要避免没必要的类型转换，因为JS引擎是用C++实现的，其内部考虑了JS复杂的类型转换，影响效率，JIT发现热点代码后会延用之前的类型信息，一旦类型转换，优化会失效
+
